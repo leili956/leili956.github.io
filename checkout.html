@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>结算页面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #4682b4;
+            color: white;
+            text-align: center;
+            padding: 1em 0;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 2em 0;
+        }
+        .checkout-form {
+            border: 1px solid #ccc;
+            padding: 1em;
+            margin: 1em 0;
+        }
+        .button {
+            display: inline-block;
+            padding: 0.5em 1em;
+            color: white;
+            background-color: #4682b4;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0.5em 0;
+        }
+        .button:hover {
+            background-color: #5a9bd4;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>结算页面</h1>
+    </header>
+    <div class="container">
+        <div class="checkout-form">
+            <h2>商品名称 1</h2>
+            <p>价格: ¥100</p>
+            <button class="button" onclick="payWithWeChat()">通过微信支付</button>
+            <button class="button" onclick="payWithAlipay()">通过支付宝支付</button>
+        </div>
+    </div>
+    <script>
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        const product = getQueryParam('product');
+        const price = getQueryParam('price');
+        document.querySelector('h2').textContent = `商品名称 ${product}`;
+        document.querySelector('p').textContent = `价格: ¥${price}`;
+
+        function payWithWeChat() {
+            alert('微信支付功能待实现');
+            // 在这里实现微信支付逻辑
+        }
+
+        function payWithAlipay() {
+            alert('支付宝支付功能待实现');
+            // 在这里实现支付宝支付逻辑
+        }
+    </script>
+</body>
+</html>
