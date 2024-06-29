@@ -48,8 +48,8 @@
     </header>
     <div class="container">
         <div class="checkout-form">
-            <h2>商品名称 1</h2>
-            <p>价格: ¥100</p>
+            <h2 id="product-name">商品名称</h2>
+            <p id="product-price">价格: ¥0</p>
             <button class="button" onclick="payWithWeChat()">通过微信支付</button>
             <button class="button" onclick="payWithAlipay()">通过支付宝支付</button>
         </div>
@@ -62,17 +62,39 @@
 
         const product = getQueryParam('product');
         const price = getQueryParam('price');
-        document.querySelector('h2').textContent = `商品名称 ${product}`;
-        document.querySelector('p').textContent = `价格: ¥${price}`;
+        document.getElementById('product-name').textContent = `商品名称 ${product}`;
+        document.getElementById('product-price').textContent = `价格: ¥${price}`;
 
-        function payWithWeChat() {
-            alert('微信支付功能待实现');
-            // 在这里实现微信支付逻辑
+        async function payWithWeChat() {
+            const response = await fetch('/pay/wechat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ product, price })
+            });
+            const result = await response.json();
+            if (result.success) {
+                window.location.href = result.payUrl;
+            } else {
+                alert('微信支付失败');
+            }
         }
 
-        function payWithAlipay() {
-            alert('支付宝支付功能待实现');
-            // 在这里实现支付宝支付逻辑
+        async function payWithAlipay() {
+            const response = await fetch('/pay/alipay', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ product, price })
+            });
+            const result = await response.json();
+            if (result.success) {
+                window.location.href = result.payUrl;
+            } else {
+                alert('支付宝支付失败');
+            }
         }
     </script>
 </body>
