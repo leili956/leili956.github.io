@@ -71,11 +71,13 @@
         document.getElementById('product-name').textContent = `商品名称 ${product}`;
         document.getElementById('product-price').textContent = `价格: ¥${price}`;
 
-        function generateQRCode(url) {
+        function showQRCode(imageSrc) {
             const qrCodeDiv = document.getElementById('qr-code');
             qrCodeDiv.innerHTML = '';
             const img = document.createElement('img');
-            img.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}`;
+            img.src = imageSrc;
+            img.alt = '支付二维码';
+            img.style.maxWidth = '100%';
             qrCodeDiv.appendChild(img);
         }
 
@@ -85,20 +87,5 @@
         }
 
         function payWithWeChat() {
-            const orderId = 'WX' + new Date().getTime();
-            const paymentUrl = `weixin://wxpay/bizpayurl?pr=${orderId}`;
-            generateQRCode(paymentUrl);
-            displayOrderInfo(orderId);
-            alert('请使用微信扫描二维码进行支付');
-        }
-
-        function payWithAlipay() {
-            const orderId = 'ALI' + new Date().getTime();
-            const paymentUrl = `alipays://platformapi/startapp?saId=10000007&qrcode=${orderId}`;
-            generateQRCode(paymentUrl);
-            displayOrderInfo(orderId);
-            alert('请使用支付宝扫描二维码进行支付');
-        }
-    </script>
-</body>
-</html>
+            const weChatCodeImage = 'images/wechat_qr_code.jpg'; // 替换为你的微信收款码图片路径
+            sho
