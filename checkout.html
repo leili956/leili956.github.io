@@ -27,6 +27,7 @@
             border: 1px solid #ccc;
             padding: 1em;
             margin: 1em 0;
+            text-align: center;
         }
         .button {
             display: inline-block;
@@ -40,6 +41,9 @@
         .button:hover {
             background-color: #5a9bd4;
         }
+        .qr-code {
+            margin: 1em 0;
+        }
     </style>
 </head>
 <body>
@@ -52,6 +56,8 @@
             <p id="product-price">价格: ¥0</p>
             <button class="button" onclick="payWithWeChat()">通过微信支付</button>
             <button class="button" onclick="payWithAlipay()">通过支付宝支付</button>
+            <div class="qr-code" id="qr-code"></div>
+            <p id="order-info"></p>
         </div>
     </div>
     <script>
@@ -65,36 +71,33 @@
         document.getElementById('product-name').textContent = `商品名称 ${product}`;
         document.getElementById('product-price').textContent = `价格: ¥${price}`;
 
-        async function payWithWeChat() {
-            const response = await fetch('/pay/wechat', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ product, price })
-            });
-            const result = await response.json();
-            if (result.success) {
-                window.location.href = result.payUrl;
-            } else {
-                alert('微信支付失败');
-            }
+        function generateQRCode(url) {
+            const qrCodeDiv = document.getElementById('qr-code');
+            qrCodeDiv.innerHTML = '';
+            const img = document.createElement('img');
+            img.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}`;
+            qrCodeDiv.appendChild(img);
         }
 
-        async function payWithAlipay() {
-            const response = await fetch('/pay/alipay', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ product, price })
-            });
-            const result = await response.json();
-            if (result.success) {
-                window.location.href = result.payUrl;
-            } else {
-                alert('支付宝支付失败');
-            }
+        function displayOrderInfo(orderId) {
+            const orderInfo = document.getElementById('order-info');
+            orderInfo.textContent = `订单号: ${orderId}`;
+        }
+
+        function payWithWeChat() {
+            const orderId = 'WX' + new Date().getTime();
+            const paymentUrl = `weixin://wxpay/bizpayurl?pr=${orderId}`;
+            generateQRCode(paymentUrl);
+            displayOrderInfo(orderId);
+            alert('请使用微信扫描二维码进行支付');
+        }
+
+        function payWithAlipay() {
+            const orderId = 'ALI' + new Date().getTime();
+            const paymentUrl = `alipays://platformapi/startapp?saId=10000007&qrcode=${orderId}`;
+            generateQRCode(paymentUrl);
+            displayOrderInfo(orderId);
+            alert('请使用支付宝扫描二维码进行支付');
         }
     </script>
 </body>
